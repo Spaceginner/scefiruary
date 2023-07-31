@@ -20,7 +20,7 @@ pub struct OutOfBounds;
 
 
 impl Registry {
-    pub fn by_address(&self, address: u16) -> Result<&u16, OutOfBounds> {
+    pub fn by_address(&self, address: u8) -> Result<&u16, OutOfBounds> {
         match address {
             0 => Ok(&self.generic_a),
             1 => Ok(&self.generic_b),
@@ -43,7 +43,7 @@ impl Registry {
         }
     }
 
-    pub fn by_address_mut(&mut self, address: u16) -> Result<&mut u16, OutOfBounds> {
+    pub fn by_address_mut(&mut self, address: u8) -> Result<&mut u16, OutOfBounds> {
         match address {
             0 => Ok(&mut self.generic_a),
             1 => Ok(&mut self.generic_b),
