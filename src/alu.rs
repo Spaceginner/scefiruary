@@ -1,37 +1,39 @@
 mod arithmetic {
-    fn sum(operand_a: i16, operand_b: i16) -> i16 {
-        operand_a + operand_b
+    use std::num::Wrapping;
+
+    fn sum(operand_a: u16, operand_b: u16) -> u16 {
+        (Wrapping(operand_a) + Wrapping(operand_b)).0
     }
 
-    fn subtraction(operand_a: i16, operand_b: i16) -> i16 {
-        operand_a - operand_b
+    fn subtraction(operand_a: u16, operand_b: u16) -> u16 {
+        (Wrapping(operand_a) - Wrapping(operand_b)).0
     }
 
-    fn multiplication(operand_a: i16, operand_b: i16) -> i16 {
-        operand_a * operand_b
+    fn multiplication(operand_a: u16, operand_b: u16) -> u16 {
+        (Wrapping(operand_a) * Wrapping(operand_b)).0
     }
 }
 
 mod bitwise {
-    fn and(operand_a: i16, operand_b: i16) -> i16 {
+    fn and(operand_a: u16, operand_b: u16) -> u16 {
         operand_a & operand_b
     }
 
-    fn or(operand_a: i16, operand_b: i16) -> i16 {
+    fn or(operand_a: u16, operand_b: u16) -> u16 {
         operand_a | operand_b
     }
 
-    fn xor(operand_a: i16, operand_b: i16) -> i16 {
+    fn xor(operand_a: u16, operand_b: u16) -> u16 {
         operand_a ^ operand_b
     }
 }
 
 mod bitshift {
-    fn right(operand_a: i16, operand_b: i16) -> i16 {
+    fn right(operand_a: u16, operand_b: u16) -> u16 {
         operand_a >> operand_b
     }
 
-    fn left(operand_a: i16, operand_b: i16) -> i16 {
+    fn left(operand_a: u16, operand_b: u16) -> u16 {
         operand_a << operand_b
     }
 
