@@ -1,39 +1,39 @@
-mod arithmetic {
+pub mod arithmetic {
     use std::num::Wrapping;
 
-    fn sum(operand_a: u16, operand_b: u16) -> u16 {
+    pub fn sum(operand_a: u16, operand_b: u16) -> u16 {
         (Wrapping(operand_a) + Wrapping(operand_b)).0
     }
 
-    fn subtraction(operand_a: u16, operand_b: u16) -> u16 {
+    pub fn subtraction(operand_a: u16, operand_b: u16) -> u16 {
         (Wrapping(operand_a) - Wrapping(operand_b)).0
     }
 
-    fn multiplication(operand_a: u16, operand_b: u16) -> u16 {
+    pub fn multiplication(operand_a: u16, operand_b: u16) -> u16 {
         (Wrapping(operand_a) * Wrapping(operand_b)).0
     }
 }
 
-mod bitwise {
-    fn and(operand_a: u16, operand_b: u16) -> u16 {
+pub mod bitwise {
+    pub fn and(operand_a: u16, operand_b: u16) -> u16 {
         operand_a & operand_b
     }
 
-    fn or(operand_a: u16, operand_b: u16) -> u16 {
+    pub fn or(operand_a: u16, operand_b: u16) -> u16 {
         operand_a | operand_b
     }
 
-    fn xor(operand_a: u16, operand_b: u16) -> u16 {
+    pub fn xor(operand_a: u16, operand_b: u16) -> u16 {
         operand_a ^ operand_b
     }
 }
 
-mod bitshift {
-    fn right(operand_a: u16, operand_b: u16) -> u16 {
+pub mod bitshift {
+    pub fn right(operand_a: u16, operand_b: u16) -> u16 {
         operand_a >> operand_b
     }
 
-    fn left(operand_a: u16, operand_b: u16) -> u16 {
+    pub fn left(operand_a: u16, operand_b: u16) -> u16 {
         operand_a << operand_b
     }
 
@@ -53,8 +53,8 @@ mod bitshift {
 }
 
 // TODO perhaps make it drier somehow, or smth, idk
-mod compare {
-    fn signed(operand_a: i16, operand_b: i16) -> u16 {
+pub mod compare {
+    pub fn signed(operand_a: i16, operand_b: i16) -> u16 {
         let mut compared = 0;
 
         if operand_a == operand_b {
@@ -68,7 +68,7 @@ mod compare {
         compared
     }
 
-    fn unsigned(operand_a: u16, operand_b: u16) -> u16 {
+    pub fn unsigned(operand_a: u16, operand_b: u16) -> u16 {
         let mut compared = 0;
 
         if operand_a == operand_b {
