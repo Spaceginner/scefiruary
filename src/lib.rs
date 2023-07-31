@@ -1,10 +1,6 @@
+pub mod instruction;
+pub mod cpu;
 mod alu;
-mod instruction;
-
-
-pub struct CPU {
-    registry: [u16; 13],
-    memory: [u8; u16::MAX as usize + 1],
-}
+mod registry;
 
 // TODO tests
