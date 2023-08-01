@@ -1,6 +1,7 @@
-use std::ops::Shl;
+use std::ops::{BitOr, Shl};
 use std::mem::size_of;
-use num_traits::Zero;
+use std::num::Wrapping;
+use num_traits::{Num, Zero};
 use crate::alu;
 use crate::instruction::Instruction;
 use crate::registry::Registry;
@@ -36,17 +37,21 @@ pub struct CPUHalted;
 impl CPU {
     // FIXME come up with a better name for this function
     fn advance_memory<T>(&mut self) -> T
-        where T: Sized + Zero + Shl<Output = T> + From<u8>
+        where T: Sized + Num + Shl<Output = T> + From<u8> + BitOr<Output = T>
     {
-        let mut value = Zero::zero();
+        let mut value = T::zero();
 
-        for _ in 0..size_of::<T>() {
+        for i in 0..size_of::<T>() {
             // get next byte
             let next_byte = self.memory[self.registry.instruction as usize];
             self.registry.instruction += 1;
 
             // store da thing
-            value = value << T::from(8) + T::from(next_byte);
+            if i > 0 {
+                value = value << T::from(8) | T::from(next_byte);
+            } else {
+                value = T::from(next_byte);
+            }
         };
 
         value
@@ -60,7 +65,7 @@ impl CPU {
         };
     }
 
-    pub fn tick(&mut self) -> Result<(), CPUHalted> {
+    pub fn tick(&mut self) -> Result<(u16, u16), CPUHalted> {
         if self.state.halted { return Err(CPUHalted); };
 
         // TODO perhaps somehow separate those?
@@ -132,10 +137,10 @@ impl CPU {
             instruction => todo!("{:?}", instruction),
         };
 
-        Ok(())
+        Ok((self.registry.display_a, self.registry.display_b))
     }
 
-    pub fn get_display(&self) -> (u16, u16) {
-        (self.registry.display_a, self.registry.display_b)
-    }
+    // pub fn get_display(&self) -> (u16, u16) {
+    //     (self.registry.display_a, self.registry.display_b)
+    // }
 }
