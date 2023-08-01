@@ -58,6 +58,8 @@ impl CPU {
             Instruction::BitshiftLeft => self.registry.operand_c = alu::bitshift::left(self.registry.operand_a, self.registry.operand_b),
             Instruction::CompareUnsigned => self.registry.operand_c = alu::compare::unsigned(self.registry.operand_a, self.registry.operand_b),
             Instruction::CompareSigned => self.registry.operand_c = alu::compare::signed(self.registry.operand_a as i16, self.registry.operand_b  as i16),
+
+            instruction => todo!("{:?}", instruction),
         };
 
         Ok(())
