@@ -41,8 +41,8 @@ impl From<u8> for Instruction {
             0b00010110 => Self::BitwiseXOR,
             0b00011000 => Self::BitshiftRight,
             0b00011001 => Self::BitshiftLeft,
-            0b00011100 => Self::CompareSigned,
-            0b00011101 => Self::CompareUnsigned,
+            0b00011100 => Self::CompareUnsigned,
+            0b00011101 => Self::CompareSigned,
 
             0b00110000 => Self::Copy,
             0b00110001 => Self::Move,
