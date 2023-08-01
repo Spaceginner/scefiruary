@@ -52,6 +52,14 @@ impl CPU {
         value
     }
 
+    /// copy data into memory with an offset
+    /// all data which goes out of bounds, will be ignored
+    pub fn load_memory(&mut self, offset: u16, data: &[u8]) {
+        for (index, byte) in data.iter().enumerate().take(u16::MAX as usize + 1 - offset as usize) {
+            self.memory[index + offset as usize] = *byte;
+        };
+    }
+
     pub fn tick(&mut self) -> Result<(), CPUHalted> {
         if self.state.halted { return Err(CPUHalted); };
 
