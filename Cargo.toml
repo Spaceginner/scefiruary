@@ -1,7 +1,11 @@
 [package]
 name = "scefiruary"
+description = "an emulator for a 16-bit (very simple) cpu - scenite firuary"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/Spaceginner/scefiruary/"
+license = "WTFPL"
+readme = "readme.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
