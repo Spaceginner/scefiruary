@@ -37,7 +37,7 @@ fib_loop:
     sum
     cp roc, rgc
     
-    ; check = compare
+    ; check = compare(0x7FFF, a)
     cp rga, rob
     mv 0x7FFFF
     cmpr
