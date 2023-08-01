@@ -1,5 +1,7 @@
+#[derive(Debug, Default)]
 pub enum Instruction {
     // special
+    #[default]
     Noop, Halt,
 
     // alu
