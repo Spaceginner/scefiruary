@@ -1,6 +1,5 @@
 use std::ops::{BitOr, Shl};
 use std::mem::size_of;
-use std::num::Wrapping;
 use num_traits::{Num, Zero};
 use crate::alu;
 use crate::instruction::Instruction;
@@ -51,7 +50,7 @@ impl CPU {
                 value = value << T::from(8) | T::from(next_byte);
             } else {
                 value = T::from(next_byte);
-            }
+            };
         };
 
         value
