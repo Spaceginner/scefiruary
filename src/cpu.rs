@@ -56,6 +56,10 @@ impl CPU {
         value
     }
 
+    fn flag_mask(flag_address: u16) -> u16 {
+        1 << ((flag_address as u8) << 4 >> 4)
+    }
+
     /// copy data into memory with an offset
     /// all data which goes out of bounds, will be ignored
     pub fn load_memory(&mut self, offset: u16, data: &[u8]) {
@@ -131,7 +135,40 @@ impl CPU {
                 let address = self.advance_memory::<u16>() as usize;
 
                 self.registry.operand_a = self.memory[address] as u16;
-            }
+            },
+
+            // flag instructions
+            Instruction::Test => {
+                if (self.registry.flag_bank & Self::flag_mask(self.registry.operand_a)) != 0 {
+                    self.registry.operand_c = self.registry.operand_b;
+                };
+            },
+            Instruction::Set => {
+                self.registry.flag_bank |= Self::flag_mask(self.registry.operand_a);
+            },
+            Instruction::Unset => {
+                self.registry.flag_bank &= !Self::flag_mask(self.registry.operand_a);
+            },
+            Instruction::SetIfZero => {
+                if self.registry.operand_a == 0 {
+                    self.registry.flag_bank |= Self::flag_mask(self.registry.operand_a);
+                };
+            },
+            Instruction::SetIfNotZero => {
+                if self.registry.operand_a != 0 {
+                    self.registry.flag_bank |= Self::flag_mask(self.registry.operand_a);
+                };
+            },
+            Instruction::UnsetIfZero => {
+                if self.registry.operand_a == 0 {
+                    self.registry.flag_bank &= !Self::flag_mask(self.registry.operand_a);
+                };
+            },
+            Instruction::UnsetIfNotZero => {
+                if self.registry.operand_a != 0 {
+                    self.registry.flag_bank &= !Self::flag_mask(self.registry.operand_a);
+                };
+            },
 
             instruction => todo!("{:?}", instruction),
         };
