@@ -14,6 +14,7 @@ pub enum Instruction {
     Copy, Move,
     CopyIfZero, CopyIfNotZero,
     MoveIfZero, MoveIfNotZero,
+    Put, Get,
 
     // flag instructions
     Test,
@@ -49,6 +50,8 @@ impl From<u8> for Instruction {
             0b00110101 => Self::CopyIfNotZero,
             0b00110110 => Self::MoveIfZero,
             0b00110111 => Self::MoveIfNotZero,
+            0b00111000 => Self::Put,
+            0b00111001 => Self::Get,
 
             0b01000000 => Self::Test,
             0b01000010 => Self::Set,
