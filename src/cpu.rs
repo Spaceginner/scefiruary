@@ -1,6 +1,6 @@
 use std::ops::{BitOr, Shl};
 use std::mem::size_of;
-use num_traits::{Num, Zero};
+use num_traits::Num;
 use crate::alu;
 use crate::instruction::Instruction;
 use crate::registry::Registry;
