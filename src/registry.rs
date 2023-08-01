@@ -16,6 +16,7 @@ pub struct Registry {
 }
 
 
+#[derive(Debug)]
 pub struct OutOfBounds;
 
 
@@ -64,5 +65,22 @@ impl Registry {
 
             _ => Err(OutOfBounds),
         }
+    }
+
+    /// copy registry A into B
+    pub fn copy_by_address(&mut self, address_a: u8, address_b: u8) -> Result<(), OutOfBounds> {
+        let registry_a_value = *self.by_address(address_a)?;
+        let registry_b = self.by_address_mut(address_b)?;
+
+        *registry_b = registry_a_value;
+
+        Ok(())
+    }
+
+    /// move value into registry
+    pub fn move_by_address(&mut self, address: u8, value: u16) -> Result<(), OutOfBounds> {
+        *self.by_address_mut(address)? = value;
+
+        Ok(())
     }
 }
