@@ -76,11 +76,4 @@ impl Registry {
 
         Ok(())
     }
-
-    /// move value into registry
-    pub fn move_by_address(&mut self, address: u8, value: u16) -> Result<(), OutOfBounds> {
-        *self.by_address_mut(address)? = value;
-
-        Ok(())
-    }
 }

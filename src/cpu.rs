@@ -89,10 +89,7 @@ impl CPU {
                 let _ = self.registry.copy_by_address(registry_a, registry_b);
             },
             Instruction::Move => {
-                let registry_address = self.advance_memory();
-                let value = self.advance_memory();
-
-                let _ = self.registry.move_by_address(registry_address, value);
+                self.registry.operand_a = self.advance_memory();
             },
             Instruction::CopyIfZero => {
                 let registry_a = self.advance_memory();
@@ -111,19 +108,13 @@ impl CPU {
                 };
             },
             Instruction::MoveIfZero => {
-                let registry_address = self.advance_memory();
-                let value = self.advance_memory();
-
-                if self.registry.operand_a == 0 {
-                    let _ = self.registry.move_by_address(registry_address, value);
+                if self.registry.operand_b == 0 {
+                    self.registry.operand_a = self.advance_memory();
                 };
             },
             Instruction::MoveIfNotZero => {
-                let registry_address = self.advance_memory();
-                let value = self.advance_memory();
-
-                if self.registry.operand_a != 0 {
-                    let _ = self.registry.move_by_address(registry_address, value);
+                if self.registry.operand_b != 0 {
+                    self.registry.operand_a = self.advance_memory();
                 };
             },
             Instruction::Put => {
@@ -142,5 +133,9 @@ impl CPU {
         };
 
         Ok(())
+    }
+
+    pub fn get_display(&self) -> (u16, u16) {
+        (self.registry.display_a, self.registry.display_b)
     }
 }
