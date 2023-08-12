@@ -30,7 +30,9 @@ impl Default for CPU {
 }
 
 
-pub struct CPUHalted;
+pub enum CPUException {
+    StateHalted
+}
 
 
 impl CPU {
@@ -68,8 +70,8 @@ impl CPU {
         };
     }
 
-    pub fn tick(&mut self) -> Result<(u16, u16), CPUHalted> {
-        if self.state.halted { return Err(CPUHalted); };
+    pub fn tick(&mut self) -> Result<(u16, u16), CPUException> {
+        if self.state.halted { return Err(CPUException::StateHalted); };
 
         // TODO perhaps somehow separate those?
         match Instruction::from(self.advance_memory::<u8>()) {
