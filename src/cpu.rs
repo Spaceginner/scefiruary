@@ -126,15 +126,15 @@ impl CPU {
                 };
             },
             Instruction::Put => {
-                let address = self.advance_memory::<u16>() as usize;
-                let value = self.registry.operand_a as u8;
+                let address = self.registry.operand_a as usize;
+                let value = self.registry.operand_b as u8;
 
                 self.memory[address] = value;
             },
             Instruction::Get => {
-                let address = self.advance_memory::<u16>() as usize;
+                let address = self.registry.operand_a as usize;
 
-                self.registry.operand_a = self.memory[address] as u16;
+                self.registry.operand_b = self.memory[address] as u16;
             },
 
             // flag instructions
