@@ -9,6 +9,8 @@ use crate::registry::Registry;
 #[derive(Default)]
 struct CPUState {
     halted: bool,
+    cycles: u32,
+    instructions: u32,
 }
 
 
@@ -53,6 +55,10 @@ impl CPU {
             } else {
                 value = T::from(next_byte);
             };
+
+            // yes, it takes 1 cycle to get 1 byte
+            // and we are doing here wrapping add just. in. case.
+            self.state.cycles = self.state.cycles.wrapping_add(1);
         };
 
         value
@@ -70,7 +76,7 @@ impl CPU {
         };
     }
 
-    pub fn tick(&mut self) -> Result<(u16, u16), CPUException> {
+    pub fn tick(&mut self) -> Result<(u16, u16, u32, u32), CPUException> {
         if self.state.halted { return Err(CPUException::StateHalted); };
 
         // TODO perhaps somehow separate those?
@@ -175,7 +181,9 @@ impl CPU {
             instruction => todo!("{:?}", instruction),
         };
 
-        Ok((self.registry.display_a, self.registry.display_b))
+        self.state.instructions = self.state.instructions.wrapping_add(1);
+
+        Ok((self.registry.display_a, self.registry.display_b, self.state.cycles, self.state.instructions))
     }
 
     // pub fn get_display(&self) -> (u16, u16) {

@@ -57,11 +57,8 @@ fn main() {
     let mut cpu = CPU::default();
     cpu.load_memory(0, FIBONACCI_PROGRAM);
 
-    let mut cycles = 0_u32;
-    while let Ok(display) = cpu.tick() {
-        cycles += 1;
-
-        println!("RDA: {:>5}  RDB: {:>5}  CYCLES: {}", display.0, display.1, cycles);
+    while let Ok((display_a, display_b, cycles, instructions)) = cpu.tick() {
+        println!("RDA: {display_a:>5}  RDB: {display_b:>5}  CYCLES: {cycles}  INSTRUCTIONS: {instructions}");
 
         thread::sleep(Duration::from_secs_f64(1.0 / FREQUENCY));
     };
