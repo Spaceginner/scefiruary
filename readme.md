@@ -12,7 +12,8 @@ emulator is rn kinda WIP. doesnt even support full set of instructions.
 
 ## examples
 
-you can run all of those examples with cargo (`cargo run --example <name> --release`)
+to compile them, you can use [assembler](https://github.com/Spaceginner/scefiruarier),
+and to run you can use `sfemu` binary (`cargo run --bin sfemu -- <executable path>`)
 
 ### fibonacci
 
