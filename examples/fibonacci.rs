@@ -1,6 +1,8 @@
+#![feature(try_blocks)]
+
 use std::thread;
 use std::time::Duration;
-use scefiruary::cpu::CPU;
+use scefiruary::cpu::{CPU, CPUException};
 
 
 /// example program - fibonacci sequence
@@ -57,11 +59,21 @@ fn main() {
     let mut cpu = CPU::default();
     cpu.load_memory(0, FIBONACCI_PROGRAM);
 
-    while let Ok((display_a, display_b, instruction_ptr, stack_ptr, cycles, instructions)) = cpu.tick() {
-        println!("RDA: {display_a:>5}  RDB: {display_b:>5}  |  RIP: {instruction_ptr:>5}  RSP: {stack_ptr:>5}  |  CYCLES: {cycles}  INSTRUCTIONS: {instructions}");
+    // while let Ok((display_a, display_b, instruction_ptr, stack_ptr, cycles, instructions)) = cpu.tick() {
+    //     println!("RDA: {display_a:>5}  RDB: {display_b:>5} RIP: {instruction_ptr:>5} RSP: {stack_ptr:>5} CYCLES: {cycles}  INSTRUCTIONS: {instructions}");
+    //
+    //     thread::sleep(Duration::from_secs_f64(1.0 / FREQUENCY));
+    // };
 
-        thread::sleep(Duration::from_secs_f64(1.0 / FREQUENCY));
+    let cpu_exception: Result<(), CPUException> = try {
+        while true {  // so that rustrover wouldnt complain about "unreachable" code meh meh meh
+            let (display_a, display_b, instruction_ptr, stack_ptr, cycles, instructions) = cpu.tick()?;
+
+            println!("RDA: {display_a:>5}  RDB: {display_b:>5}  |  RIP: {instruction_ptr:>5}  RSP: {stack_ptr:>5}  |  CYCLES: {cycles}  INSTRUCTIONS: {instructions}");
+
+            thread::sleep(Duration::from_secs_f64(1.0 / FREQUENCY));
+        };
     };
 
-    println!("\nCPU HALTED");
+    println!("\nCPU EXCEPTED - {}", cpu_exception.unwrap_err());
 }

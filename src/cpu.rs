@@ -1,14 +1,16 @@
+use std::fmt;
+use std::fmt::Formatter;
 use std::ops::{BitOr, Shl};
 use std::mem::size_of;
 use num_traits::Num;
 use crate::alu;
 use crate::instruction::Instruction;
-use crate::registry::Registry;
+use crate::registry::{Registry, RegistryError};
 
 
 #[derive(Default)]
 struct CPUState {
-    halted: bool,
+    exception: Option<CPUException>,
     cycles: u32,
     instructions: u32,
 }
@@ -32,8 +34,21 @@ impl Default for CPU {
 }
 
 
+#[derive(Debug, Copy, Clone)]
 pub enum CPUException {
-    StateHalted
+    Halted,
+    InvalidInstruction(u8, u16), InvalidRegistry(u8),
+}
+
+
+impl fmt::Display for CPUException {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            CPUException::Halted => write!(f, "CPU was halted"),
+            CPUException::InvalidInstruction(instr, addr) => write!(f, "instruction 0x{:X} at 0x{:X} was not recognised", instr, addr),
+            CPUException::InvalidRegistry(reg) => write!(f, "registry address 0x{:X} was not recognised", reg),
+        }
+    }
 }
 
 
@@ -77,13 +92,15 @@ impl CPU {
     }
 
     pub fn tick(&mut self) -> Result<(u16, u16, u16, u16, u32, u32), CPUException> {
-        if self.state.halted { return Err(CPUException::StateHalted); };
+        if let Some(exception) = self.state.exception {
+            return Err(exception);
+        };
 
         // TODO perhaps somehow separate those?
         match Instruction::from(self.advance_memory::<u8>()) {
             // special
             Instruction::Noop => (),
-            Instruction::Halt => self.state.halted = true,
+            Instruction::Halt => self.state.exception = Some(CPUException::Halted),
 
             // alu
             Instruction::Sum => self.registry.operand_c = alu::arithmetic::sum(self.registry.operand_a, self.registry.operand_b),
@@ -102,7 +119,10 @@ impl CPU {
                 let registry_a = self.advance_memory();
                 let registry_b = self.advance_memory();
 
-                let _ = self.registry.copy_by_address(registry_a, registry_b);
+                match self.registry.copy_by_address(registry_a, registry_b) {
+                    Ok(()) => (),
+                    Err(RegistryError::OutOfBounds(addr)) => return Err(CPUException::InvalidRegistry(addr)),
+                };
             },
             Instruction::Move => {
                 self.registry.operand_a = self.advance_memory();
@@ -120,7 +140,10 @@ impl CPU {
                 let registry_b = self.advance_memory();
 
                 if self.registry.operand_a != 0 {
-                    let _ = self.registry.copy_by_address(registry_a, registry_b);
+                    match self.registry.copy_by_address(registry_a, registry_b) {
+                        Ok(()) => (),
+                        Err(RegistryError::OutOfBounds(addr)) => return Err(CPUException::InvalidRegistry(addr)),
+                    };
                 };
             },
             Instruction::MoveIfZero => {

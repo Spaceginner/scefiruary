@@ -17,11 +17,13 @@ pub struct Registry {
 
 
 #[derive(Debug)]
-pub struct OutOfBounds;
+pub enum RegistryError {
+    OutOfBounds(u8),
+}
 
 
 impl Registry {
-    pub fn by_address(&self, address: u8) -> Result<&u16, OutOfBounds> {
+    pub fn by_address(&self, address: u8) -> Result<&u16, RegistryError> {
         match address {
             0 => Ok(&self.generic_a),
             1 => Ok(&self.generic_b),
@@ -40,11 +42,11 @@ impl Registry {
             11 => Ok(&self.display_a),
             12 => Ok(&self.display_b),
 
-            _ => Err(OutOfBounds),
+            addr => Err(RegistryError::OutOfBounds(addr)),
         }
     }
 
-    pub fn by_address_mut(&mut self, address: u8) -> Result<&mut u16, OutOfBounds> {
+    pub fn by_address_mut(&mut self, address: u8) -> Result<&mut u16, RegistryError> {
         match address {
             0 => Ok(&mut self.generic_a),
             1 => Ok(&mut self.generic_b),
@@ -63,12 +65,12 @@ impl Registry {
             11 => Ok(&mut self.display_a),
             12 => Ok(&mut self.display_b),
 
-            _ => Err(OutOfBounds),
+            addr => Err(RegistryError::OutOfBounds(addr)),
         }
     }
 
     /// copy registry A into B
-    pub fn copy_by_address(&mut self, address_a: u8, address_b: u8) -> Result<(), OutOfBounds> {
+    pub fn copy_by_address(&mut self, address_a: u8, address_b: u8) -> Result<(), RegistryError> {
         let registry_a_value = *self.by_address(address_a)?;
         let registry_b = self.by_address_mut(address_b)?;
 
