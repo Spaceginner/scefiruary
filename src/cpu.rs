@@ -76,7 +76,7 @@ impl CPU {
         };
     }
 
-    pub fn tick(&mut self) -> Result<(u16, u16, u32, u32), CPUException> {
+    pub fn tick(&mut self) -> Result<(u16, u16, u16, u16, u32, u32), CPUException> {
         if self.state.halted { return Err(CPUException::StateHalted); };
 
         // TODO perhaps somehow separate those?
@@ -183,7 +183,11 @@ impl CPU {
 
         self.state.instructions = self.state.instructions.wrapping_add(1);
 
-        Ok((self.registry.display_a, self.registry.display_b, self.state.cycles, self.state.instructions))
+        Ok((
+            self.registry.display_a, self.registry.display_b,
+            self.registry.instruction, self.registry.generic_f,
+            self.state.cycles, self.state.instructions
+        ))
     }
 
     // pub fn get_display(&self) -> (u16, u16) {
