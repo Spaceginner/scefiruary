@@ -5,14 +5,26 @@ pub struct Registry {
     pub generic_c: u16,
     pub generic_d: u16,
     pub generic_e: u16,
-    pub generic_f: u16,
-    pub instruction: u16,
+
+    pub stack_ptr: u16,
+    pub instruction_ptr: u16,
     pub flag_bank: u16,
+
     pub operand_a: u16,
     pub operand_b: u16,
     pub operand_c: u16,
     pub display_a: u16,
     pub display_b: u16,
+
+    pub parameter_a: u16,
+    pub parameter_b: u16,
+    pub parameter_c: u16,
+
+    pub return_a: u16,
+    pub return_b: u16,
+
+    pub burner_a: u16,
+    pub burner_b: u16,
 }
 
 
@@ -30,9 +42,9 @@ impl Registry {
             2 => Ok(&self.generic_c),
             3 => Ok(&self.generic_d),
             4 => Ok(&self.generic_e),
-            5 => Ok(&self.generic_f),
 
-            6 => Ok(&self.instruction),
+            5 => Ok(&self.stack_ptr),
+            6 => Ok(&self.instruction_ptr),
             7 => Ok(&self.flag_bank),
 
             8 => Ok(&self.operand_a),
@@ -41,6 +53,16 @@ impl Registry {
 
             11 => Ok(&self.display_a),
             12 => Ok(&self.display_b),
+
+            13 => Ok(&self.parameter_a),
+            14 => Ok(&self.parameter_b),
+            15 => Ok(&self.parameter_c),
+
+            16 => Ok(&self.return_a),
+            17 => Ok(&self.return_b),
+
+            18 => Ok(&self.burner_a),
+            19 => Ok(&self.burner_b),
 
             addr => Err(RegistryError::OutOfBounds(addr)),
         }
@@ -53,9 +75,9 @@ impl Registry {
             2 => Ok(&mut self.generic_c),
             3 => Ok(&mut self.generic_d),
             4 => Ok(&mut self.generic_e),
-            5 => Ok(&mut self.generic_f),
 
-            6 => Ok(&mut self.instruction),
+            5 => Ok(&mut self.stack_ptr),
+            6 => Ok(&mut self.instruction_ptr),
             7 => Ok(&mut self.flag_bank),
 
             8 => Ok(&mut self.operand_a),
@@ -64,6 +86,16 @@ impl Registry {
 
             11 => Ok(&mut self.display_a),
             12 => Ok(&mut self.display_b),
+
+            13 => Ok(&mut self.parameter_a),
+            14 => Ok(&mut self.parameter_b),
+            15 => Ok(&mut self.parameter_c),
+
+            16 => Ok(&mut self.return_a),
+            17 => Ok(&mut self.return_b),
+
+            18 => Ok(&mut self.burner_a),
+            19 => Ok(&mut self.burner_b),
 
             addr => Err(RegistryError::OutOfBounds(addr)),
         }

@@ -61,8 +61,8 @@ impl CPU {
 
         for i in 0..size_of::<T>() {
             // get next byte
-            let next_byte = self.memory[self.registry.instruction as usize];
-            self.registry.instruction += 1;
+            let next_byte = self.memory[self.registry.instruction_ptr as usize];
+            self.registry.instruction_ptr += 1;
 
             // store da thing
             if i > 0 {
@@ -208,7 +208,7 @@ impl CPU {
 
         Ok((
             self.registry.display_a, self.registry.display_b,
-            self.registry.instruction, self.registry.generic_f,
+            self.registry.instruction_ptr, self.registry.stack_ptr,
             self.state.cycles, self.state.instructions
         ))
     }
